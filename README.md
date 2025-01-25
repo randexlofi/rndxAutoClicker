@@ -1,6 +1,7 @@
 ![image](https://github.com/user-attachments/assets/2f6e249f-8238-4c0f-8f48-1adc6a977caa)
 
-**Upcoming updates**
+> [!NOTE]
+> Upcoming updates.
 
 Core
 - Allow users to save and load different clicker settings as profiles for quick switching. (multiple save files);
