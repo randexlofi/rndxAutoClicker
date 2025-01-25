@@ -30,6 +30,10 @@ namespace rndxAutoClicker
         private Keys assignedKey;
         private bool isWaitingForKey = false;
 
+        //Save Settings
+        private string dirPath = "cfgs";
+        private string cfgFileName = "config.json";
+
         public Form1()
         {
             InitializeComponent();
@@ -61,21 +65,38 @@ namespace rndxAutoClicker
             };
 
             string json = JsonSerializer.Serialize(config);
-            File.WriteAllText("config.json", json);
+
+            // Save the config file
+            try
+            {
+                if (!Directory.Exists(dirPath))
+                {
+                    Directory.CreateDirectory(dirPath); // Create the directory if it doesn't exist.
+                }
+                File.WriteAllText(Path.Combine(dirPath, cfgFileName), json);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Error saving config file: " + ex.Message); // Show an error message if the file couldn't be saved.
+            }
         }
 
         private void LoadAppState()
         {
-            if (File.Exists("config.json"))
+            if (File.Exists(Path.Combine(dirPath, cfgFileName)))
             {
-                string json = File.ReadAllText("config.json");
+                string json = File.ReadAllText(Path.Combine(dirPath, cfgFileName));
                 var config = JsonSerializer.Deserialize<AppConfig>(json);
 
+                // Load the data from the config file
                 checkBoxHold.Checked = config.isHoldClickChecked;
                 comboBoxMouseButton.SelectedIndex = config.comboBoxClickButton;
                 msInput.Text = config.textBoxMiliseconds;
                 assignedKey = config.assignedKeyStored;
+
+                // Register the key
                 RegisterHotKey(this.Handle, HOTKEY_ID, MOD_NONE, (int)assignedKey);
+                // Assign the text to the buttons
                 buttonStartMacro.Text = "Start (" + assignedKey.ToString() + ")";
                 buttonStopMacro.Text = "Stop (" + assignedKey.ToString() + ")";
             }
@@ -267,6 +288,7 @@ namespace rndxAutoClicker
             buttonStopMacro.Enabled = false;
 
             msInput.Enabled = false;
+
         }
 
         private void checkBoxHold_CheckedChanged(object sender, EventArgs e)
