@@ -1,5 +1,10 @@
 ![image](https://github.com/user-attachments/assets/2f6e249f-8238-4c0f-8f48-1adc6a977caa)
 
+Discord RPC:
+![image](https://github.com/user-attachments/assets/3c61d4f5-4cb5-4a50-9c4c-fc2156cbe7cb)
+![image](https://github.com/user-attachments/assets/e013cbf2-85e9-427f-badf-cfefce686fcb)
+
+
 > [!NOTE]
 > Upcoming updates.
 
