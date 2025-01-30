@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.Security.Policy;
 using System.Diagnostics;
 using System.Windows.Forms.VisualStyles;
+using DiscordRPC;
 
 
 namespace rndxAutoClicker
@@ -34,9 +35,15 @@ namespace rndxAutoClicker
         private string dirPath = "cfgs";
         private string cfgFileName = "config.json";
 
+        //Discord RPC
+        private static readonly DiscordRpcClient client = new DiscordRpcClient("1334527614458527835");
+
         public Form1()
         {
             InitializeComponent();
+
+            InitRPC();
+            UpdateRPC("Idling...");
 
             RegisterHotKey(this.Handle, HOTKEY_ID, MOD_NONE, (int)assignedKey); // Register the key to Enable/Disable Macros.
 
@@ -160,6 +167,7 @@ namespace rndxAutoClicker
                 //Start Timer (Auto Clicker)
                 timerAutoClicker.Interval = (int)(Int32.Parse(msInput.Text));
                 timerAutoClicker.Start();
+                
             }
             else
             {
@@ -221,11 +229,13 @@ namespace rndxAutoClicker
         private void buttonStartMacro_Click(object sender, EventArgs e)
         {
             StartMacro();
+            UpdateRPC("Using Macro.");
         }
 
         private void buttonStopMacro_Click(object sender, EventArgs e)
         {
             StopMacro();
+            UpdateRPC("Idling...");
         }
 
         private void AutoClicker_Tick(object sender, EventArgs e)
@@ -288,7 +298,6 @@ namespace rndxAutoClicker
             buttonStopMacro.Enabled = false;
 
             msInput.Enabled = false;
-
         }
 
         private void checkBoxHold_CheckedChanged(object sender, EventArgs e)
@@ -314,6 +323,37 @@ namespace rndxAutoClicker
             {
                 MessageBox.Show("Failed to open the link: " + ex.Message);
             }
+        }
+
+        public static void InitRPC()
+        {
+            client.Initialize();
+        }
+
+        public static void UpdateRPC(string detailText)
+        {
+            var presence = new RichPresence()
+            {
+                State = detailText,
+                Details = "Developed by randexlofi",
+
+                Assets = new Assets()
+                {
+                    LargeImageKey = "f6b8a3c5013ac8777f09b1463ead4b17_1_",
+                    LargeImageText = "rndxAutoClicker",
+                },
+
+                Buttons = new DiscordRPC.Button[]
+                {
+                    new DiscordRPC.Button()
+                    {
+                        Label = "GitHub",
+                        Url="https://github.com/randexlofi"
+                    }
+                }
+            };
+
+            client.SetPresence(presence);
         }
     }
 }
